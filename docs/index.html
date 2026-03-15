@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="tr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Lunara | GitHub Pages Sürümü</title>
+    <meta
+      name="description"
+      content="Lunara'nın GitHub Pages üzerinde açılıp hemen oynanabilen premium solo sürümü."
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="ambient ambient-a"></div>
+    <div class="ambient ambient-b"></div>
+    <div class="ambient ambient-c"></div>
+
+    <div class="page-shell">
+      <header class="hero glass">
+        <div class="hero-copy">
+          <p class="eyebrow">Lunara</p>
+          <h1>GitHub Pages üzerinde açılıp hemen oynanan premium sürüm</h1>
+          <p class="hero-text">
+            Tek bağlantı ile açılır, yüklenir ve oynanır. Kayıt gerektirmez. En iyi skorların ve
+            kişisel ilerlemen cihazında saklanır.
+          </p>
+        </div>
+        <div class="hero-badges">
+          <span class="hero-pill">Hold</span>
+          <span class="hero-pill">Ghost</span>
+          <span class="hero-pill">Combo</span>
+          <span class="hero-pill">Back-to-back</span>
+          <span class="hero-pill">Sprint 40</span>
+        </div>
+      </header>
+
+      <main class="layout-grid">
+        <aside class="column stack">
+          <section class="glass card">
+            <div class="section-head">
+              <p class="eyebrow">Mod Seçimi</p>
+              <h2>Akışını belirle</h2>
+            </div>
+            <div class="mode-list" id="mode-list"></div>
+          </section>
+
+          <section class="glass card">
+            <div class="section-head">
+              <p class="eyebrow">Kişisel Kayıtlar</p>
+              <h2>Yerel vitrin</h2>
+            </div>
+            <div class="stats-grid compact">
+              <article class="stat-tile">
+                <span class="stat-label">Klasik en iyi</span>
+                <strong id="best-classic">0</strong>
+              </article>
+              <article class="stat-tile">
+                <span class="stat-label">Zen en iyi</span>
+                <strong id="best-zen">0</strong>
+              </article>
+              <article class="stat-tile">
+                <span class="stat-label">Ritim en iyi</span>
+                <strong id="best-ritim">0</strong>
+              </article>
+              <article class="stat-tile">
+                <span class="stat-label">Sprint rekoru</span>
+                <strong id="best-sprint">--:--</strong>
+              </article>
+            </div>
+          </section>
+
+          <section class="glass card">
+            <div class="section-head">
+              <p class="eyebrow">Kontroller</p>
+              <h2>Hazır düzen</h2>
+            </div>
+            <div class="control-list">
+              <div><span>Sol / Sağ</span><strong>Yön tuşları</strong></div>
+              <div><span>Yumuşak bırak</span><strong>Aşağı</strong></div>
+              <div><span>Sert bırak</span><strong>Boşluk</strong></div>
+              <div><span>Döndür</span><strong>Yukarı / Z</strong></div>
+              <div><span>Beklet</span><strong>Shift</strong></div>
+              <div><span>Duraklat</span><strong>P / Esc</strong></div>
+            </div>
+          </section>
+        </aside>
+
+        <section class="center-column">
+          <section class="glass board-card">
+            <div class="board-topbar">
+              <div>
+                <p class="eyebrow">Canlı Seans</p>
+                <h2 id="mode-title">Klasik</h2>
+              </div>
+              <div class="action-row">
+                <button class="action-button primary" id="start-button">Seansı Başlat</button>
+                <button class="action-button" id="pause-button">Duraklat</button>
+              </div>
+            </div>
+
+            <div class="board-stage">
+              <div class="side-preview">
+                <p class="preview-label">Beklet</p>
+                <div class="mini-grid" id="hold-grid"></div>
+                <div class="mini-copy" id="hold-copy">Henüz boş</div>
+              </div>
+
+              <div class="board-shell">
+                <div class="board-status" id="session-banner">Hazır olduğunda başlat.</div>
+                <div class="board-grid" id="board"></div>
+              </div>
+
+              <div class="side-preview">
+                <p class="preview-label">Sıradaki</p>
+                <div class="queue-stack" id="next-list"></div>
+              </div>
+            </div>
+
+            <div class="touch-row">
+              <button class="touch-button" data-touch="left">◀</button>
+              <button class="touch-button" data-touch="right">▶</button>
+              <button class="touch-button" data-touch="down">▼</button>
+              <button class="touch-button" data-touch="rotate">⟳</button>
+              <button class="touch-button" data-touch="hold">Hold</button>
+              <button class="touch-button" data-touch="drop">Drop</button>
+            </div>
+          </section>
+        </section>
+
+        <aside class="column stack">
+          <section class="glass card">
+            <div class="section-head">
+              <p class="eyebrow">Canlı Veriler</p>
+              <h2>Seans özeti</h2>
+            </div>
+            <div class="stats-grid">
+              <article class="stat-tile">
+                <span class="stat-label">Skor</span>
+                <strong id="score-value">0</strong>
+              </article>
+              <article class="stat-tile">
+                <span class="stat-label">Satır</span>
+                <strong id="lines-value">0</strong>
+              </article>
+              <article class="stat-tile">
+                <span class="stat-label">Seviye</span>
+                <strong id="level-value">1</strong>
+              </article>
+              <article class="stat-tile">
+                <span class="stat-label">Süre</span>
+                <strong id="time-value">00:00</strong>
+              </article>
+              <article class="stat-tile">
+                <span class="stat-label">Combo</span>
+                <strong id="combo-value">0</strong>
+              </article>
+              <article class="stat-tile">
+                <span class="stat-label">B2B</span>
+                <strong id="b2b-value">0</strong>
+              </article>
+            </div>
+            <div class="progress-wrap">
+              <div class="progress-copy">
+                <span>Bir sonraki hız eşiği</span>
+                <strong id="progress-copy">%0</strong>
+              </div>
+              <div class="progress-track">
+                <div class="progress-fill" id="progress-fill"></div>
+              </div>
+            </div>
+          </section>
+
+          <section class="glass card">
+            <div class="section-head">
+              <p class="eyebrow">Ritim Notu</p>
+              <h2>Oyun hissi</h2>
+            </div>
+            <p class="session-copy" id="mode-description">
+              Giderek hızlanan klasik akış. Yüksek skor ve uzun seans için tasarlandı.
+            </p>
+            <div class="session-tags" id="mode-tags"></div>
+          </section>
+
+          <section class="glass card">
+            <div class="section-head">
+              <p class="eyebrow">Kişisel İlerleme</p>
+              <h2>Bu tarayıcıda</h2>
+            </div>
+            <div class="control-list">
+              <div><span>Toplam seans</span><strong id="profile-plays">0</strong></div>
+              <div><span>Toplam satır</span><strong id="profile-lines">0</strong></div>
+              <div><span>En uzun combo</span><strong id="profile-combo">0</strong></div>
+              <div><span>Son mod</span><strong id="profile-mode">Klasik</strong></div>
+            </div>
+          </section>
+        </aside>
+      </main>
+    </div>
+
+    <div class="overlay hidden" id="result-overlay" aria-hidden="true">
+      <div class="overlay-card glass">
+        <p class="eyebrow">Seans Tamamlandı</p>
+        <h2 id="result-title">Akış burada durdu</h2>
+        <p class="result-copy" id="result-copy">
+          Güçlü bir ritim yakaladın. İstersen aynı modda tekrar başlayabilirsin.
+        </p>
+        <div class="stats-grid compact">
+          <article class="stat-tile">
+            <span class="stat-label">Skor</span>
+            <strong id="result-score">0</strong>
+          </article>
+          <article class="stat-tile">
+            <span class="stat-label">Satır</span>
+            <strong id="result-lines">0</strong>
+          </article>
+          <article class="stat-tile">
+            <span class="stat-label">Seviye</span>
+            <strong id="result-level">1</strong>
+          </article>
+          <article class="stat-tile">
+            <span class="stat-label">Süre</span>
+            <strong id="result-time">00:00</strong>
+          </article>
+        </div>
+        <div class="action-row wide">
+          <button class="action-button primary" id="play-again-button">Yeniden Başlat</button>
+          <button class="action-button" id="close-overlay-button">Pencereyi Kapat</button>
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>
