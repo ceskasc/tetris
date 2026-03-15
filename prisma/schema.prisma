@@ -1,0 +1,391 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum GameMode {
+  klasik
+  rahat
+  zen
+  sprint
+  gorev
+  gunluk
+  duello
+}
+
+enum ThemeMode {
+  sistem
+  gece
+  aydinlik
+}
+
+enum GraphicsDensity {
+  hafif
+  dengeli
+  yuksek
+}
+
+enum TokenPurpose {
+  email_verify
+  password_reset
+}
+
+enum TournamentStatus {
+  yaklasiyor
+  kayit_acik
+  devam_ediyor
+  tamamlandi
+}
+
+enum TournamentEntryStatus {
+  kayitli
+  aktif
+  elendi
+  tamamlandi
+}
+
+enum MatchStatus {
+  bekleniyor
+  hazirlik
+  oyunda
+  tamamlandi
+  iptal
+}
+
+enum MatchOutcome {
+  galibiyet
+  maglubiyet
+  baglantikoptu
+}
+
+model User {
+  id                 String                    @id @default(cuid())
+  email              String                    @unique
+  username           String                    @unique
+  passwordHash       String
+  emailVerifiedAt    DateTime?
+  createdAt          DateTime                  @default(now())
+  updatedAt          DateTime                  @updatedAt
+  profile            Profile?
+  settings           UserSettings?
+  statistics         UserStatistics?
+  progression        UserProgression?
+  sessions           Session[]
+  verificationTokens VerificationToken[]
+  passwordResetTokens PasswordResetToken[]
+  cosmetics          UserCosmetic[]
+  quests             UserQuestProgress[]
+  achievements       UserAchievementProgress[]
+  gameSessions       GameSession[]
+  onlineParticipants OnlineMatchParticipant[]
+  tournamentEntries  TournamentEntry[]
+  dailyRewards       DailyRewardClaim[]
+  notifications      Notification[]
+}
+
+model Profile {
+  userId              String   @id
+  displayName         String
+  bio                 String   @default("")
+  title               String   @default("Yeni Ritim")
+  avatarHue           String   @default("#f2b8ff")
+  selectedThemeId     String   @default("gece-cicegi")
+  selectedBoardSkinId String   @default("board-gece-cicegi")
+  selectedEffectId    String   @default("fx-ribbon")
+  selectedAvatarId    String?  @default("avatar-aurora")
+  favoriteMode        GameMode @default(klasik)
+  romanceSignature    String   @default("Nazik ama kararlı.")
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+  user                User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Session {
+  id         String   @id @default(cuid())
+  userId     String
+  tokenHash  String   @unique
+  userAgent  String?
+  ipAddress  String?
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  lastSeenAt DateTime @default(now())
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model VerificationToken {
+  id         String       @id @default(cuid())
+  userId     String
+  tokenHash  String       @unique
+  purpose    TokenPurpose @default(email_verify)
+  expiresAt  DateTime
+  createdAt  DateTime     @default(now())
+  consumedAt DateTime?
+  user       User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model PasswordResetToken {
+  id         String       @id @default(cuid())
+  userId     String
+  tokenHash  String       @unique
+  purpose    TokenPurpose @default(password_reset)
+  expiresAt  DateTime
+  createdAt  DateTime     @default(now())
+  consumedAt DateTime?
+  user       User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model UserSettings {
+  userId               String          @id
+  themeMode            ThemeMode       @default(gece)
+  themePreset          String          @default("gece-cicegi")
+  reducedMotion        Boolean         @default(false)
+  highContrast         Boolean         @default(false)
+  graphicsDensity      GraphicsDensity @default(yuksek)
+  masterVolume         Int             @default(80)
+  musicVolume          Int             @default(60)
+  sfxVolume            Int             @default(80)
+  touchControls        Boolean         @default(true)
+  notificationsEnabled Boolean         @default(true)
+  vibrationEnabled     Boolean         @default(false)
+  keyBindings          Json
+  createdAt            DateTime        @default(now())
+  updatedAt            DateTime        @updatedAt
+  user                 User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model UserStatistics {
+  userId                   String   @id
+  totalMatches             Int      @default(0)
+  totalPlayMinutes         Int      @default(0)
+  totalScore               BigInt   @default(0)
+  highScore                Int      @default(0)
+  totalLines               Int      @default(0)
+  longestCombo             Int      @default(0)
+  perfectClearCount        Int      @default(0)
+  averageMatchDurationMs   Int      @default(0)
+  averageScore             Int      @default(0)
+  dailyStreak              Int      @default(0)
+  unlockedRewardCount      Int      @default(0)
+  achievementCompletionPct Int      @default(0)
+  questCompletionPct       Int      @default(0)
+  favoriteMode             GameMode @default(klasik)
+  onlineWins               Int      @default(0)
+  onlineLosses             Int      @default(0)
+  tournamentsJoined        Int      @default(0)
+  bestTournamentRank       Int?
+  gamesByMode              Json
+  themeUsage               Json
+  createdAt                DateTime @default(now())
+  updatedAt                DateTime @updatedAt
+  user                     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model UserProgression {
+  userId            String   @id
+  xp                Int      @default(0)
+  level             Int      @default(1)
+  prestige          Int      @default(0)
+  stars             Int      @default(0)
+  rankedRating      Int      @default(1000)
+  dailyStreak       Int      @default(0)
+  nextDailyRewardAt DateTime?
+  lastRewardClaimAt DateTime?
+  modMastery        Json
+  milestoneState    Json
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Cosmetic {
+  id           String         @id
+  category     String
+  name         String
+  description  String
+  rarity       String
+  unlockSource String
+  palette      Json
+  glow         String
+  createdAt    DateTime       @default(now())
+  users        UserCosmetic[]
+}
+
+model UserCosmetic {
+  id         String   @id @default(cuid())
+  userId     String
+  cosmeticId String
+  unlockedAt DateTime @default(now())
+  isEquipped Boolean  @default(false)
+  isFavorite Boolean  @default(false)
+  isNew      Boolean  @default(true)
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  cosmetic   Cosmetic @relation(fields: [cosmeticId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, cosmeticId])
+}
+
+model UserQuestProgress {
+  id         String   @id @default(cuid())
+  userId     String
+  questId    String
+  progress   Int      @default(0)
+  goal       Int
+  completed  Boolean  @default(false)
+  claimedAt  DateTime?
+  resetsAt   DateTime?
+  payload    Json?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, questId])
+}
+
+model UserAchievementProgress {
+  id          String   @id @default(cuid())
+  userId      String
+  achievementId String
+  progress    Int      @default(0)
+  goal        Int
+  unlockedAt  DateTime?
+  claimedAt   DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, achievementId])
+}
+
+model GameSession {
+  id           String   @id @default(cuid())
+  userId        String
+  mode          GameMode
+  startedAt     DateTime
+  endedAt       DateTime
+  score         Int
+  lines         Int
+  level         Int
+  comboMax      Int
+  perfectClears Int      @default(0)
+  durationMs    Int
+  metadata      Json
+  createdAt     DateTime @default(now())
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
+}
+
+model OnlineMatch {
+  id          String                   @id @default(cuid())
+  roomCode    String                   @unique
+  status      MatchStatus              @default(bekleniyor)
+  mode        GameMode                 @default(duello)
+  bestOf      Int                      @default(3)
+  startedAt   DateTime?
+  endedAt     DateTime?
+  winnerId    String?
+  metadata    Json
+  createdAt   DateTime                 @default(now())
+  updatedAt   DateTime                 @updatedAt
+  participants OnlineMatchParticipant[]
+}
+
+model OnlineMatchParticipant {
+  id             String       @id @default(cuid())
+  matchId        String
+  userId         String
+  seat           Int
+  score          Int          @default(0)
+  attacksSent    Int          @default(0)
+  linesCleared   Int          @default(0)
+  outcome        MatchOutcome?
+  disconnectedAt DateTime?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  match          OnlineMatch  @relation(fields: [matchId], references: [id], onDelete: Cascade)
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([matchId, userId])
+}
+
+model Tournament {
+  id                String               @id
+  slug              String               @unique
+  name              String
+  subtitle          String
+  description       String
+  status            TournamentStatus
+  format            String
+  season            String
+  startsAt          DateTime
+  endsAt            DateTime
+  registrationClosesAt DateTime
+  maxParticipants   Int
+  rewards           Json
+  rules             Json
+  bannerTheme       Json
+  createdAt         DateTime             @default(now())
+  updatedAt         DateTime             @updatedAt
+  entries           TournamentEntry[]
+  matches           TournamentMatch[]
+}
+
+model TournamentEntry {
+  id           String                @id @default(cuid())
+  tournamentId String
+  userId       String
+  status       TournamentEntryStatus @default(kayitli)
+  seed         Int?
+  points       Int                   @default(0)
+  rank         Int?
+  createdAt    DateTime              @default(now())
+  updatedAt    DateTime              @updatedAt
+  tournament   Tournament            @relation(fields: [tournamentId], references: [id], onDelete: Cascade)
+  user         User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([tournamentId, userId])
+}
+
+model TournamentMatch {
+  id           String     @id @default(cuid())
+  tournamentId String
+  round        Int
+  roomCode     String?
+  playerOneId  String
+  playerTwoId  String
+  winnerId     String?
+  scheduledAt  DateTime?
+  completedAt  DateTime?
+  result       Json?
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  tournament   Tournament @relation(fields: [tournamentId], references: [id], onDelete: Cascade)
+}
+
+model DailyRewardClaim {
+  id         String   @id @default(cuid())
+  userId     String
+  dayIndex   Int
+  xpAwarded  Int
+  rewardId   String?
+  claimedAt  DateTime @default(now())
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  title     String
+  body      String
+  type      String
+  isRead    Boolean  @default(false)
+  actionUrl String?
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
