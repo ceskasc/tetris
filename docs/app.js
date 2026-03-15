@@ -101,6 +101,13 @@ const dom = {
   modeTitle: document.getElementById("mode-title"),
   modeDescription: document.getElementById("mode-description"),
   modeTags: document.getElementById("mode-tags"),
+  heroModeName: document.getElementById("hero-mode-name"),
+  heroModeCopy: document.getElementById("hero-mode-copy"),
+  heroModeTags: document.getElementById("hero-mode-tags"),
+  heroBestCopy: document.getElementById("hero-best-copy"),
+  heroPlays: document.getElementById("hero-plays"),
+  heroLines: document.getElementById("hero-lines"),
+  heroCombo: document.getElementById("hero-combo"),
   score: document.getElementById("score-value"),
   lines: document.getElementById("lines-value"),
   level: document.getElementById("level-value"),
@@ -118,7 +125,8 @@ const dom = {
   profileLines: document.getElementById("profile-lines"),
   profileCombo: document.getElementById("profile-combo"),
   profileMode: document.getElementById("profile-mode"),
-  startButton: document.getElementById("start-button"),
+  startButtons: Array.from(document.querySelectorAll("[data-start-session]")),
+  sessionStates: Array.from(document.querySelectorAll("[data-session-state]")),
   pauseButton: document.getElementById("pause-button"),
   overlay: document.getElementById("result-overlay"),
   resultTitle: document.getElementById("result-title"),
@@ -139,6 +147,47 @@ let activeMode = "klasik";
 let state = null;
 let rafId = 0;
 let lastFrame = 0;
+
+function getSessionStateKey() {
+  if (!state) return "hazir";
+  if (state.status === "oynaniyor") return "oynaniyor";
+  if (state.status === "duraklatildi") return "duraklatildi";
+  if (state.status === "bitti") return "bitti";
+  return "hazir";
+}
+
+function getSessionStateLabel() {
+  const status = getSessionStateKey();
+  if (status === "oynaniyor") return "Akışta";
+  if (status === "duraklatildi") return "Duraklatıldı";
+  if (status === "bitti") return "Tamamlandı";
+  return "Hazır";
+}
+
+function getBestCopy(modeKey) {
+  if (modeKey === "sprint") {
+    return save.bestSprintMs ? formatTime(save.bestSprintMs) : "Henüz kayıt yok";
+  }
+  const bestScore = save.bestScores[modeKey] ?? 0;
+  return `${formatNumber(bestScore)} puan`;
+}
+
+function syncHeroSummary() {
+  dom.heroBestCopy.textContent = getBestCopy(activeMode);
+  dom.heroPlays.textContent = String(save.totalPlays);
+  dom.heroLines.textContent = formatNumber(save.totalLines);
+  dom.heroCombo.textContent = String(save.longestCombo);
+}
+
+function syncSessionIndicators() {
+  const key = getSessionStateKey();
+  const label = getSessionStateLabel();
+  dom.sessionStates.forEach((node) => {
+    node.dataset.state = key;
+    node.textContent = label;
+  });
+  document.body.dataset.mode = activeMode;
+}
 
 function loadSave() {
   try {
@@ -471,11 +520,20 @@ function renderQueue() {
 
 function renderModeCards() {
   dom.modeList.innerHTML = "";
-  Object.entries(MODES).forEach(([key, mode]) => {
+  Object.entries(MODES).forEach(([key, mode], index) => {
     const button = document.createElement("button");
     button.type = "button";
     button.className = `mode-card${key === activeMode ? " active" : ""}`;
-    button.innerHTML = `<h3>${mode.ad}</h3><p>${mode.aciklama}</p>`;
+    button.innerHTML = `
+      <div class="mode-card-top">
+        <h3>${mode.ad}</h3>
+        <span class="mode-card-index">0${index + 1}</span>
+      </div>
+      <p>${mode.aciklama}</p>
+      <div class="mode-card-tags">
+        ${mode.etiketler.map((tag) => `<span>${tag}</span>`).join("")}
+      </div>
+    `;
     button.addEventListener("click", () => {
       activeMode = key;
       renderModeCards();
@@ -489,12 +547,18 @@ function renderModeMeta() {
   const mode = MODES[activeMode];
   dom.modeTitle.textContent = mode.ad;
   dom.modeDescription.textContent = mode.aciklama;
+  dom.heroModeName.textContent = mode.ad;
+  dom.heroModeCopy.textContent = mode.aciklama;
   dom.modeTags.innerHTML = "";
+  dom.heroModeTags.innerHTML = "";
   mode.etiketler.forEach((tag) => {
     const span = document.createElement("span");
     span.textContent = tag;
     dom.modeTags.appendChild(span);
+    dom.heroModeTags.appendChild(span.cloneNode(true));
   });
+  syncHeroSummary();
+  syncSessionIndicators();
 }
 
 function renderStatsOnly() {
@@ -516,6 +580,7 @@ function renderStatsOnly() {
     dom.progressFill.style.width = `${progress}%`;
     dom.progressCopy.textContent = `%${Math.round(progress)}`;
   }
+  syncSessionIndicators();
 }
 
 function renderBoard() {
@@ -573,6 +638,7 @@ function syncProfile() {
   dom.profileLines.textContent = String(save.totalLines);
   dom.profileCombo.textContent = String(save.longestCombo);
   dom.profileMode.textContent = save.lastMode;
+  syncHeroSummary();
 }
 
 function showResult() {
@@ -639,7 +705,7 @@ function bindEvents() {
         break;
     }
   });
-  dom.startButton.addEventListener("click", startRun);
+  dom.startButtons.forEach((button) => button.addEventListener("click", startRun));
   dom.pauseButton.addEventListener("click", togglePause);
   dom.playAgainButton.addEventListener("click", startRun);
   dom.closeOverlayButton.addEventListener("click", () => {
@@ -665,6 +731,7 @@ function init() {
   renderModeCards();
   renderModeMeta();
   syncProfile();
+  syncSessionIndicators();
   bindEvents();
   render();
 }

@@ -8,35 +8,126 @@
       name="description"
       content="Lunara'nın GitHub Pages üzerinde açılıp hemen oynanabilen premium solo sürümü."
     />
+    <meta name="theme-color" content="#090a14" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="./styles.css" />
   </head>
-  <body>
+  <body data-mode="klasik">
     <div class="ambient ambient-a"></div>
     <div class="ambient ambient-b"></div>
     <div class="ambient ambient-c"></div>
 
     <div class="page-shell">
-      <header class="hero glass">
-        <div class="hero-copy">
-          <p class="eyebrow">Lunara</p>
-          <h1>GitHub Pages üzerinde açılıp hemen oynanan premium sürüm</h1>
-          <p class="hero-text">
-            Tek bağlantı ile açılır, yüklenir ve oynanır. Kayıt gerektirmez. En iyi skorların ve
-            kişisel ilerlemen cihazında saklanır.
-          </p>
+      <header class="topbar premium-outline panel-surface">
+        <div class="brand-lockup">
+          <div class="brand-mark">L</div>
+          <div>
+            <p class="eyebrow">Lunara</p>
+            <h1 class="brand-title">GitHub Pages Oyun Sürümü</h1>
+          </div>
         </div>
-        <div class="hero-badges">
-          <span class="hero-pill">Hold</span>
-          <span class="hero-pill">Ghost</span>
-          <span class="hero-pill">Combo</span>
-          <span class="hero-pill">Back-to-back</span>
-          <span class="hero-pill">Sprint 40</span>
+        <div class="topbar-actions">
+          <span class="status-pill" data-session-state data-state="hazir">Hazır</span>
+          <a class="nav-link" href="https://github.com/ceskasc/tetris" target="_blank" rel="noreferrer">
+            Repo
+          </a>
         </div>
       </header>
 
-      <main class="layout-grid">
+      <section class="hero premium-outline panel-surface-strong">
+        <div class="hero-copy">
+          <p class="eyebrow">Bugünün Ritmi</p>
+          <h2>Çizgilerin zarafeti, akışın sıcaklığı.</h2>
+          <p class="hero-text">
+            Ana projedeki premium Lunara hissini, GitHub Pages üzerinde doğrudan açılıp
+            oynanabilen tek kişilik bir deneyime dönüştürdüm. Giriş gerekmez; hold, ghost,
+            combo ve dört farklı mod anında hazırdır.
+          </p>
+          <div class="hero-actions">
+            <button class="action-button primary" data-start-session>Şimdi Oyna</button>
+            <a class="action-button subtle" href="#oyun-alani">Oyun Alanına İn</a>
+          </div>
+          <div class="hero-insights">
+            <article class="insight-card">
+              <span class="insight-label">Kontrol Hissi</span>
+              <strong>Düşük gecikme</strong>
+              <p>Klavye ve dokunmatik için hızlı, net ve akıcı tepki.</p>
+            </article>
+            <article class="insight-card">
+              <span class="insight-label">Yerel İlerleme</span>
+              <strong>Tarayıcıya kaydolur</strong>
+              <p>Rekorların, toplam seansların ve combo gücün cihazında saklanır.</p>
+            </article>
+            <article class="insight-card">
+              <span class="insight-label">Oyun Modları</span>
+              <strong>4 farklı ritim</strong>
+              <p>Klasik, Zen, Ritim ve Sprint 40 arasında anında geçiş yap.</p>
+            </article>
+          </div>
+        </div>
+
+        <aside class="hero-spotlight">
+          <section class="spotlight-card premium-outline">
+            <p class="eyebrow">Seçili Mod</p>
+            <h3 id="hero-mode-name">Klasik</h3>
+            <p class="spotlight-copy" id="hero-mode-copy">
+              Giderek hızlanan geleneksel yüksek skor akışı.
+            </p>
+            <div class="session-tags large" id="hero-mode-tags"></div>
+          </section>
+
+          <div class="spotlight-grid">
+            <article class="mini-stat">
+              <span>Bu moddaki en iyi vitrin</span>
+              <strong id="hero-best-copy">0 puan</strong>
+            </article>
+            <article class="mini-stat">
+              <span>Toplam seans</span>
+              <strong id="hero-plays">0</strong>
+            </article>
+            <article class="mini-stat">
+              <span>Temizlenen çizgi</span>
+              <strong id="hero-lines">0</strong>
+            </article>
+            <article class="mini-stat">
+              <span>En uzun combo</span>
+              <strong id="hero-combo">0</strong>
+            </article>
+          </div>
+        </aside>
+      </section>
+
+      <section class="dashboard-strip">
+        <article class="dashboard-card premium-outline panel-surface">
+          <span class="stat-label">Klasik en iyi</span>
+          <strong id="best-classic">0</strong>
+          <p>Uzun seanslardaki en rafine skor akışın.</p>
+        </article>
+        <article class="dashboard-card premium-outline panel-surface">
+          <span class="stat-label">Zen en iyi</span>
+          <strong id="best-zen">0</strong>
+          <p>Düşük baskılı akışta ulaştığın en temiz ritim.</p>
+        </article>
+        <article class="dashboard-card premium-outline panel-surface">
+          <span class="stat-label">Ritim en iyi</span>
+          <strong id="best-ritim">0</strong>
+          <p>Daha canlı tempoda kurduğun en güçlü seri.</p>
+        </article>
+        <article class="dashboard-card premium-outline panel-surface">
+          <span class="stat-label">Sprint rekoru</span>
+          <strong id="best-sprint">--:--</strong>
+          <p>40 satırlık parkuru en kısa sürede tamamlama süren.</p>
+        </article>
+      </section>
+
+      <main class="layout-grid" id="oyun-alani">
         <aside class="column stack">
-          <section class="glass card">
+          <section class="card premium-outline panel-surface">
             <div class="section-head">
               <p class="eyebrow">Mod Seçimi</p>
               <h2>Akışını belirle</h2>
@@ -44,62 +135,50 @@
             <div class="mode-list" id="mode-list"></div>
           </section>
 
-          <section class="glass card">
+          <section class="card premium-outline panel-surface">
             <div class="section-head">
-              <p class="eyebrow">Kişisel Kayıtlar</p>
-              <h2>Yerel vitrin</h2>
-            </div>
-            <div class="stats-grid compact">
-              <article class="stat-tile">
-                <span class="stat-label">Klasik en iyi</span>
-                <strong id="best-classic">0</strong>
-              </article>
-              <article class="stat-tile">
-                <span class="stat-label">Zen en iyi</span>
-                <strong id="best-zen">0</strong>
-              </article>
-              <article class="stat-tile">
-                <span class="stat-label">Ritim en iyi</span>
-                <strong id="best-ritim">0</strong>
-              </article>
-              <article class="stat-tile">
-                <span class="stat-label">Sprint rekoru</span>
-                <strong id="best-sprint">--:--</strong>
-              </article>
-            </div>
-          </section>
-
-          <section class="glass card">
-            <div class="section-head">
-              <p class="eyebrow">Kontroller</p>
-              <h2>Hazır düzen</h2>
+              <p class="eyebrow">Kontrol Düzeni</p>
+              <h2>Hazır kurulum</h2>
             </div>
             <div class="control-list">
               <div><span>Sol / Sağ</span><strong>Yön tuşları</strong></div>
               <div><span>Yumuşak bırak</span><strong>Aşağı</strong></div>
               <div><span>Sert bırak</span><strong>Boşluk</strong></div>
-              <div><span>Döndür</span><strong>Yukarı / Z</strong></div>
+              <div><span>Döndür</span><strong>Yukarı / Z / X</strong></div>
               <div><span>Beklet</span><strong>Shift</strong></div>
               <div><span>Duraklat</span><strong>P / Esc</strong></div>
             </div>
           </section>
+
+          <section class="card premium-outline panel-surface">
+            <div class="section-head">
+              <p class="eyebrow">Stil Notu</p>
+              <h2>Bu sürüm ne sunuyor?</h2>
+            </div>
+            <p class="session-copy">
+              Bu sayfa, ana Lunara projesinin estetik ve oyun hissini GitHub Pages sınırları
+              içinde taşır. Tam hesaplı ve online platform kodu repoda bulunur; burada ise
+              doğrudan açılıp oynanan rafine solo deneyim vardır.
+            </p>
+          </section>
         </aside>
 
         <section class="center-column">
-          <section class="glass board-card">
+          <section class="board-card premium-outline panel-surface-strong">
             <div class="board-topbar">
               <div>
                 <p class="eyebrow">Canlı Seans</p>
                 <h2 id="mode-title">Klasik</h2>
               </div>
               <div class="action-row">
-                <button class="action-button primary" id="start-button">Seansı Başlat</button>
+                <span class="status-pill compact" data-session-state data-state="hazir">Hazır</span>
+                <button class="action-button primary" data-start-session>Seansı Başlat</button>
                 <button class="action-button" id="pause-button">Duraklat</button>
               </div>
             </div>
 
             <div class="board-stage">
-              <div class="side-preview">
+              <div class="side-preview preview-panel">
                 <p class="preview-label">Beklet</p>
                 <div class="mini-grid" id="hold-grid"></div>
                 <div class="mini-copy" id="hold-copy">Henüz boş</div>
@@ -110,7 +189,7 @@
                 <div class="board-grid" id="board"></div>
               </div>
 
-              <div class="side-preview">
+              <div class="side-preview preview-panel">
                 <p class="preview-label">Sıradaki</p>
                 <div class="queue-stack" id="next-list"></div>
               </div>
@@ -128,7 +207,7 @@
         </section>
 
         <aside class="column stack">
-          <section class="glass card">
+          <section class="card premium-outline panel-surface">
             <div class="section-head">
               <p class="eyebrow">Canlı Veriler</p>
               <h2>Seans özeti</h2>
@@ -170,7 +249,7 @@
             </div>
           </section>
 
-          <section class="glass card">
+          <section class="card premium-outline panel-surface">
             <div class="section-head">
               <p class="eyebrow">Ritim Notu</p>
               <h2>Oyun hissi</h2>
@@ -181,7 +260,7 @@
             <div class="session-tags" id="mode-tags"></div>
           </section>
 
-          <section class="glass card">
+          <section class="card premium-outline panel-surface">
             <div class="section-head">
               <p class="eyebrow">Kişisel İlerleme</p>
               <h2>Bu tarayıcıda</h2>
@@ -195,14 +274,36 @@
           </section>
         </aside>
       </main>
+
+      <section class="footer-panels">
+        <article class="footer-card premium-outline panel-surface">
+          <p class="eyebrow">Bu Sürümde Var</p>
+          <h2>Doğrudan oynanan premium solo akış</h2>
+          <ul class="feature-list">
+            <li>Hold, ghost, combo, back-to-back ve seviye hız eğrisi</li>
+            <li>Klasik, Zen, Ritim ve Sprint 40 modları</li>
+            <li>Dokunmatik butonlar ve yerel rekor vitrinleri</li>
+            <li>Tarayıcı kapanıp açılsa da kalan kişisel kayıtlar</li>
+          </ul>
+        </article>
+        <article class="footer-card premium-outline panel-surface">
+          <p class="eyebrow">Ana Proje Notu</p>
+          <h2>Lunara platform omurgası repoda duruyor</h2>
+          <p class="session-copy">
+            GitHub Pages sürümü burada hızlı oynanış için açık. Tam Next.js tabanlı ürün,
+            hesap sistemi, progression, turnuva ve online 1v1 mimarisiyle birlikte aynı
+            repoda korunuyor.
+          </p>
+        </article>
+      </section>
     </div>
 
     <div class="overlay hidden" id="result-overlay" aria-hidden="true">
-      <div class="overlay-card glass">
+      <div class="overlay-card premium-outline panel-surface-strong">
         <p class="eyebrow">Seans Tamamlandı</p>
         <h2 id="result-title">Akış burada durdu</h2>
         <p class="result-copy" id="result-copy">
-          Güçlü bir ritim yakaladın. İstersen aynı modda tekrar başlayabilirsin.
+          Güçlü bir ritim yakaladın. İstersen aynı modda yeniden başlayabilirsin.
         </p>
         <div class="stats-grid compact">
           <article class="stat-tile">
